@@ -7,8 +7,8 @@ const isDev = require('electron-is-dev');
 const createWindow = () => {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1016,
+        height: 680,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
@@ -23,6 +23,9 @@ const createWindow = () => {
     installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS], options)
         .then((name) => console.log(`Added Extension: ${name}`))
         .catch((err) => console.log('An error occurred: ', err));
+
+    // conceal menu
+    // mainWindow.removeMenu();
 }
 
 const options = {
