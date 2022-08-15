@@ -1,16 +1,20 @@
 import "./App.css";
 
-import { GlobalStyle } from "./style";
+import { GlobalStyle, FlexBox } from "./style";
 
 import Header from "./components/Header";
 import SideBar from "./components/SideBar";
+import ToDo from "./pages/ToDo";
 
 function App() {
   return (
     <>
       <GlobalStyle />
       <Header />
-      <SideBar />
+      <FlexBox>
+        <SideBar />
+        <ToDo></ToDo>
+      </FlexBox>
     </>
   );
 }

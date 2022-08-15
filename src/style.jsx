@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
     html, body, div, span, applet, object, iframe,
@@ -26,7 +26,7 @@ export const GlobalStyle = createGlobalStyle`
     footer, header, hgroup, menu, nav, section {
         display: block;
     }
-    body {
+    html,body {
         line-height: 1;
         height: 100%;
     }
@@ -45,4 +45,14 @@ export const GlobalStyle = createGlobalStyle`
         border-collapse: collapse;
         border-spacing: 0;
     }
+    #root{
+        height: calc(100vh - 82px);
+    }
+`;
+
+export const FlexBox = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+  height: 100%;
 `;
