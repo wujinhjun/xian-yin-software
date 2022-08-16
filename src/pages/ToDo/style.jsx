@@ -10,7 +10,6 @@ export const ToDoContainer = styled.div`
 export const ToDoWrapper = styled.div`
   flex-grow: 1;
   box-sizing: border-box;
-  background: red;
   display: flex;
   padding: 24px 24px 0 24px;
   flex-direction: row;
