@@ -17,6 +17,7 @@ export const ToDoListWrapper = styled.div`
   box-sizing: border-box;
   padding: 24px 16px;
   height: fit-content;
+  overflow: auto;
 `;
 
 export const TitleWrapper = styled.div`
@@ -33,6 +34,7 @@ export const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
   height: 36px;
+  cursor: pointer;
 `;
 
 export const Title = styled.div`
@@ -69,10 +71,19 @@ export const AddItem = styled.div`
   height: 32px;
   background: ${assistColor};
   border-radius: 8px;
+  cursor: pointer;
 `;
 
 export const AddIcon = styled.div`
   background: url(${(props) => props.icon});
   width: 24px;
   aspect-ratio: 1;
+`;
+
+export const ItemList = styled.ul`
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
 `;

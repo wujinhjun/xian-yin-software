@@ -58,7 +58,7 @@ export const UserHead = styled.div`
   background: ${mainColor};
   border-radius: 50%;
   position: absolute;
-  right: 32px;
+  right: 24px;
   line-height: 50px;
   text-align: center;
   color: ${whiteColor};
