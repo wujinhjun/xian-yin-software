@@ -2,9 +2,9 @@ import "./App.css";
 
 import { GlobalStyle, FlexBox } from "./style";
 
-import Header from "./components/Header";
-import SideBar from "./components/SideBar";
-import ToDo from "./pages/ToDo";
+import Header from "./components/Header/Header";
+import SideBar from "./components/SideBar/SideBar";
+import ToDo from "./pages/ToDo/ToDo";
 
 function App() {
   return (

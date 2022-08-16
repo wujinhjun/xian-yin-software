@@ -5,6 +5,10 @@ export const ToDoContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const ToDoWrapper = styled.div`
