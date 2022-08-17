@@ -6,6 +6,8 @@ const isDev = require('electron-is-dev');
 
 
 const createWindow = () => {
+    const ElectronStore = require('electron-store');
+    ElectronStore.initRenderer();
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         width: 1040,

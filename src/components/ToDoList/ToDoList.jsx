@@ -17,8 +17,13 @@ import plus from "../../static/svg/plus.svg";
 import ToDoItem from "../ToDoItem/ToDoItem";
 import * as Helper from "../../utils/Helpers";
 
+const Store = window.require("electron-store");
+const dataStore = new Store({
+  name: "data",
+  accessPropertiesByDotNotation: false,
+});
 const ToDoList = (props) => {
-  const { title, tasks } = props;
+  const { id, title, tasks } = props;
   const taskObj = Helper.flattenArr(tasks);
   const [count, setCount] = useState(tasks.length);
   const [tasksList, setTasksList] = useState(taskObj);
@@ -38,6 +43,8 @@ const ToDoList = (props) => {
       isNew: true,
     };
     setTasksList({ ...tasksList, [newID]: newTask });
+    // // dataStore.set(`ToDo.${id}.tasks`: { ...tasksList, [newID]: newTask });
+    // console.log(dataStore.get(`ToDo.`));
     console.log("add");
   };
 
@@ -52,10 +59,6 @@ const ToDoList = (props) => {
       console.log(title + " update");
     }
   };
-
-  useEffect(() => {
-    setCount(tasksArr.length);
-  }, [tasksArr]);
 
   return (
     <>
