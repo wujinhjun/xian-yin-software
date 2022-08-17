@@ -7,10 +7,8 @@ const ToDo = () => {
     <ToDoContainer>
       <ToDoWrapper>
         {ToDoData.map((item) => {
-          const { id, title, count, tasks } = item;
-          return (
-            <ToDoList key={id} title={title} count={count} tasks={tasks} />
-          );
+          const { id, title, tasks } = item;
+          return <ToDoList key={id} title={title} tasks={tasks} />;
         })}
       </ToDoWrapper>
     </ToDoContainer>
