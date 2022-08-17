@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron')
+const { initialize, enable } = require("@electron/remote/main");
 const path = require('path')
 const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
 const isDev = require('electron-is-dev');
@@ -12,13 +13,17 @@ const createWindow = () => {
         minWidth: 1040,
         minHeight: 680,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: true,
+            contextIsolation: false,
         }
     })
 
     // 加载 index.html
     const urlLocation = isDev ? "http://localhost:3000" : `url`;
     mainWindow.loadURL(urlLocation)
+    initialize();
+    enable(mainWindow.webContents);
 
     // 打开开发工具
     mainWindow.webContents.openDevTools()
