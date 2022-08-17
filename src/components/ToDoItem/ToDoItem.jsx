@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import useKeyPress from "../../hooks/useKeyPress";
+
+import ContCentContainer from "./ContentsContainer";
 
 import handleIcon from "../../static/svg/chevron-down.svg";
 import {
@@ -7,24 +11,108 @@ import {
   ItemContent,
   ItemIcon,
   ContentsContainer,
-  ContentWrapper,
-  ContentStatus,
-  Content,
   DateGap,
+  ItemEditInput,
 } from "./style";
-
+import * as Helper from "../../utils/Helpers";
+import useContextMenu from "../../hooks/useContextMenu";
 const ToDoItem = (props) => {
-  const { name, isActive, contents, startDate, endDate } = props;
+  const {
+    id,
+    name,
+    isActive,
+    contents,
+    startDate,
+    endDate,
+    isNewPart,
+    updateToDoName,
+  } = props;
   const [active, setActive] = useState(isActive);
+  const [editStatus, setEditStatus] = useState(false);
+  const [isNew, setIsNew] = useState(isNewPart);
+  const [value, setValue] = useState(name);
+
+  const enterPress = useKeyPress(13);
+  const escPress = useKeyPress(27);
 
   const changeActive = () => {
-    console.log(active);
+    // console.log(active);
     setActive(!active);
   };
+  const editItem = () => {
+    setEditStatus(id);
+  };
+
+  const clickElement = useContextMenu(
+    [
+      {
+        label: `${active ? "收起" : "展开"}`,
+        click: () => {
+          const parentElement = Helper.getParentNode(
+            clickElement.current,
+            "to-do-item"
+          );
+          if (parentElement) {
+            console.log("unfolding");
+            changeActive();
+          }
+        },
+      },
+      {
+        label: "重命名",
+        click: () => {
+          const parentElement = Helper.getParentNode(
+            clickElement.current,
+            "to-do-item"
+          );
+          if (parentElement) {
+            console.log("rename");
+            editItem();
+          }
+        },
+      },
+      {
+        label: "新建子项",
+        click: () => {
+          const parentElement = Helper.getParentNode(
+            clickElement.current,
+            "to-do-item"
+          );
+          if (parentElement) {
+            console.log("new son");
+          }
+        },
+      },
+    ],
+    ".to-do-list",
+    [active]
+  );
+
+  useEffect(() => {
+    if (enterPress && value.trim() !== "") {
+      updateToDoName(id, value, isNew);
+      setEditStatus(false);
+      setIsNew(false);
+      //   console.log("use");
+    }
+  }, [enterPress, escPress]);
   return (
-    <ItemWrapper className={active ? "active" : ""}>
+    <ItemWrapper className={active ? "active to-do-item" : "to-do-item"}>
       <ItemContainer>
-        <ItemContent>{name}</ItemContent>
+        {id !== editStatus && !isNew && (
+          <ItemContent onDoubleClick={() => editItem()}>{value}</ItemContent>
+        )}
+        {(isNew || id === editStatus) && (
+          <ItemContent>
+            <ItemEditInput
+              type="text"
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+            />
+          </ItemContent>
+        )}
         <ItemIcon
           onClick={() => {
             changeActive();
@@ -33,20 +121,21 @@ const ToDoItem = (props) => {
           icon={handleIcon}
         />
       </ItemContainer>
-      {active && (
+      {!isNew && active && (
         <ContentsContainer>
           {contents.map((item) => {
             return (
-              <ContentWrapper key={item.id}>
-                <ContentStatus className={item.isCompleted ? "active" : ""} />
-                <Content>{item.content}</Content>
-              </ContentWrapper>
+              <ContCentContainer
+                key={item.id}
+                isCompleted={item.isCompleted}
+                content={item.content}
+              ></ContCentContainer>
             );
           })}
 
-          <DateGap>
+          {/* <DateGap>
             {startDate}-{endDate}
-          </DateGap>
+          </DateGap> */}
         </ContentsContainer>
       )}
     </ItemWrapper>

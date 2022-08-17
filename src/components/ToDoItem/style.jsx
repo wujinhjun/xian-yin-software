@@ -12,12 +12,12 @@ import check from "../../static/svg/check.svg";
 export const ItemWrapper = styled.li`
   display: flex;
   flex-direction: column;
-  padding: 4px 8px;
+  padding: 8px 16px;
   background: ${whiteColor};
   border-radius: 8px;
   gap: 12px;
   &.active {
-    padding: 4px 8px 12px 8px;
+    padding: 8px 16px 12px 16px;
   }
   transition: all 0.3s;
 `;
@@ -37,6 +37,11 @@ export const ItemContent = styled.span`
   font-weight: 500;
   font-size: 20px;
   color: ${blackColor};
+`;
+
+export const ItemEditInput = styled.input`
+  height: 100%;
+  width: 90%;
 `;
 
 export const ItemIcon = styled.div`
