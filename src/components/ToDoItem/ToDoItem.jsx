@@ -93,7 +93,6 @@ const ToDoItem = (props) => {
       updateToDoName(id, value, isNew);
       setEditStatus(false);
       setIsNew(false);
-      //   console.log("use");
     }
   }, [enterPress, escPress]);
   return (

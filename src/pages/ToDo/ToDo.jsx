@@ -131,10 +131,8 @@ const ToDo = () => {
     saveDataToStore(initStore);
     console.log(dataStore);
   }
-  //   console.log(ToDoData);
 
   const ToDoDataArr = Helpers.objToArr(ToDoData);
-  //   console.log(ToDoDataArr);
 
   return (
     <ToDoContainer>

@@ -30,28 +30,10 @@ const saveTasksToStore = (tasks, title) => {
 
 const ToDoList = (props) => {
   const { title, tasks } = props;
-
   const taskObj = Helper.flattenArr(tasks);
-  //   const [count, setCount] = useState(tasks.length);
   const [tasksList, setTasksList] = useState(taskObj);
-  //   console.log(taskObj);
   const tasksArr = Helper.objToArr(tasksList);
   const count = tasksArr.length;
-  //   switch (title) {
-  //     case "ToDo":
-  //       console.log(dataStore.get("ToDo").ToDo);
-  //       break;
-  //     case "Doing":
-  //       console.log(dataStore.get("ToDo").Doing);
-  //       break;
-  //     case "Done":
-  //       console.log(dataStore.get("ToDo").Done);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   console.log(dataStore.get("ToDo").Doing);
-  //   console.log(tasksArr);
 
   const addTask = () => {
     const newID = uuidv4();
