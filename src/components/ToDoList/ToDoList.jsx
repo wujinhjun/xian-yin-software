@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import {
@@ -13,7 +13,6 @@ import {
 } from "./style";
 
 import plus from "../../static/svg/plus.svg";
-import useContextMenu from "../../hooks/useContextMenu";
 import ToDoItem from "../ToDoItem/ToDoItem";
 import * as Helper from "../../utils/Helpers";
 
@@ -32,9 +31,25 @@ const ToDoList = (props) => {
   const { title, tasks } = props;
   const taskObj = Helper.flattenArr(tasks);
   const [tasksList, setTasksList] = useState(taskObj);
-  const [activeTasks, setActiveTasks] = useState([]);
-  const [editStatus, setEditStatus] = useState(false);
   const tasksArr = Helper.objToArr(tasksList);
+
+  //   const activeTempList = tasksArr.map((item) => {
+  //     if (item.isActive) {
+  //       return item.id;
+  //     } else {
+  //       return null;
+  //     }
+  //   });
+
+  const [activeTasks, setActiveTasks] = useState(
+    tasksArr.map((item) => {
+      if (item.isActive) {
+        return item.id;
+      } else {
+        return null;
+      }
+    })
+  );
   const count = tasksArr.length;
 
   //   create
@@ -69,6 +84,13 @@ const ToDoList = (props) => {
     saveTasksToStore(newTasks, title);
   };
 
+  const updateToDoContents = (id, contents) => {
+    const modifiedItem = { ...tasksList[id], contents };
+    const newTasks = { ...tasksList, [id]: modifiedItem };
+    setTasksList(newTasks);
+    saveTasksToStore(newTasks, title);
+  };
+
   // change active file
   const changeActive = (taskID) => {
     if (!activeTasks.includes(taskID)) {
@@ -79,12 +101,8 @@ const ToDoList = (props) => {
       setActiveTasks(afterClose);
       updateToDoActive(taskID, false);
     }
-    console.log(dataStore.get(`ToDo.${title}.tasks`));
-    console.log(activeTasks.includes(taskID));
-  };
-
-  const editItem = (id) => {
-    setEditStatus(id);
+    // console.log(dataStore.get(`ToDo.${title}.tasks[${index}]`));
+    // console.log(activeTasks.includes(taskID));
   };
 
   //   delete
@@ -123,7 +141,7 @@ const ToDoList = (props) => {
                 updateToDoName={updateToDoName}
                 deleteToDoItem={deleteToDoItem}
                 changeActive={changeActive}
-                devList={tasksArr}
+                updateToDoContents={updateToDoContents}
               ></ToDoItem>
             );
           })}

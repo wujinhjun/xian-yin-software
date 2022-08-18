@@ -111,6 +111,10 @@ export const Content = styled.span`
   font-weight: 400;
   font-size: 16px;
   margin-left: 8px;
+  cursor: pointer;
+  &.completed {
+    color: ${grayMoreColor};
+  }
 `;
 
 export const DateGap = styled.span`
@@ -118,4 +122,9 @@ export const DateGap = styled.span`
   margin-left: 4px;
   font-weight: 400;
   font-size: 14px;
+`;
+
+export const ContentInput = styled.input`
+  width: auto;
+  height: 100%;
 `;

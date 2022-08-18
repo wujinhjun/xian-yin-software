@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 
 import useKeyPress from "../../hooks/useKeyPress";
-import useContextMenu from "../../hooks/useContextMenu";
-import useMouseLocation from "../../hooks/useMouseLocation";
 
 import ContCentContainer from "./ContentsContainer";
+import * as Helpers from "../../utils/Helpers";
+import { v4 as uuidv4 } from "uuid";
 
 import handleIcon from "../../static/svg/chevron-down.svg";
 import deleteIcon from "../../static/svg/trash.svg";
-import plus from "../../static/svg/plus.svg";
 
 import {
   ItemWrapper,
@@ -20,8 +19,6 @@ import {
   ItemEditInput,
   ContentAdd,
 } from "./style";
-
-import * as Helper from "../../utils/Helpers";
 
 const Store = window.require("electron-store");
 const dataStore = new Store({
@@ -41,22 +38,22 @@ const ToDoItem = (props) => {
     updateToDoName,
     deleteToDoItem,
     changeActive,
-    devList,
+    updateToDoContents,
   } = props;
   //   const [active, setActive] = useState(isActive);
-  const active = isActive;
+
   const [editStatus, setEditStatus] = useState(false);
   const [isNew, setIsNew] = useState(isNewPart);
   const [value, setValue] = useState(name);
   const node = useRef(null);
-  const mouseLocation = useMouseLocation();
+
+  const [contentsList, setContentsList] = useState(contents);
+  const [completedList, setCompletedList] = useState([]);
+  const contentsArr = Helpers.objToArr(contentsList);
   const enterPress = useKeyPress(13);
   const escPress = useKeyPress(27);
+  const active = isActive;
 
-  //   const changeActive = () => {
-  //     // console.log(active);
-  //     setActive(!active);
-  //   };
   const editItem = () => {
     setEditStatus(id);
   };
@@ -64,64 +61,56 @@ const ToDoItem = (props) => {
     deleteToDoItem(id);
   };
 
-  //   const clickElement = useContextMenu(
-  //     [
-  //       {
-  //         label: `${active ? "收起" : "展开"}`,
-  //         click: () => {
-  //           const parentElement = Helper.getParentNode(
-  //             clickElement.current,
-  //             "to-do-item"
-  //           );
-  //           if (parentElement) {
-  //             const clickID = parentElement.dataset.id;
-  //             changeActive(clickID);
-  //           }
-  //         },
-  //       },
-  //       {
-  //         label: `删除`,
-  //         click: () => {
-  //           const parentElement = Helper.getParentNode(
-  //             clickElement.current,
-  //             "to-do-item"
-  //           );
-  //           if (parentElement) {
-  //             // console.log("unfolding");
-  //             const clickID = parentElement.dataset.id;
-  //             deleteItem(clickID);
-  //           }
-  //         },
-  //       },
-  //       {
-  //         label: "重命名",
-  //         click: () => {
-  //           const parentElement = Helper.getParentNode(
-  //             clickElement.current,
-  //             "to-do-item"
-  //           );
-  //           if (parentElement) {
-  //             console.log("rename");
-  //             editItem();
-  //           }
-  //         },
-  //       },
-  //       {
-  //         label: "新建子项",
-  //         click: () => {
-  //           const parentElement = Helper.getParentNode(
-  //             clickElement.current,
-  //             "to-do-item"
-  //           );
-  //           if (parentElement) {
-  //             console.log("new son");
-  //           }
-  //         },
-  //       },
-  //     ],
-  //     ".to-do-list",
-  //     [mouseLocation.x, mouseLocation.y]
-  //   );
+  //
+  const createNewContent = () => {
+    const newID = uuidv4();
+    const newContent = {
+      id: newID,
+      isCompleted: false,
+      content: "",
+      isNew: true,
+    };
+
+    setContentsList({ ...contentsList, [newID]: newContent });
+  };
+
+  const updateContentCompleted = (contentID, completed, itemID = id) => {
+    const modifiedContent = {
+      ...contentsList[contentID],
+      isCompleted: completed,
+    };
+    const newContents = { ...contentsList, [contentID]: modifiedContent };
+    setContentsList(newContents);
+    updateToDoContents(itemID, newContents);
+  };
+
+  const updateTaskContent = (contentID, value, itemID = id) => {
+    const modifiedContent = {
+      ...contentsList[contentID],
+      content: value,
+      isNew: false,
+    };
+    const newContents = { ...contentsList, [contentID]: modifiedContent };
+    setContentsList(newContents);
+    updateToDoContents(itemID, newContents);
+  };
+
+  const changeComplete = (contentID) => {
+    if (!completedList.includes(contentID)) {
+      setCompletedList([...completedList, contentID]);
+      updateContentCompleted(contentID, true);
+    } else {
+      const afterClose = completedList.filter((itemID) => itemID !== contentID);
+      setCompletedList(afterClose);
+      updateContentCompleted(contentID, false);
+    }
+  };
+
+  const deleteContent = (contentID) => {
+    const { [contentID]: value, ...afterDelete } = contentsList;
+    setCompletedList(afterDelete);
+    updateToDoContents(id, afterDelete);
+  };
 
   useEffect(() => {
     if (isNew) {
@@ -185,16 +174,21 @@ const ToDoItem = (props) => {
       </ItemContainer>
       {!isNew && active && (
         <ContentsContainer>
-          {contents.map((item) => {
+          {contentsArr.map((item) => {
             return (
               <ContCentContainer
                 key={item.id}
+                id={item.id}
                 isCompleted={item.isCompleted}
                 content={item.content}
+                isNewPart={item.isNew}
+                updateTaskContent={updateTaskContent}
+                changeComplete={changeComplete}
+                deleteContent={deleteContent}
               ></ContCentContainer>
             );
           })}
-          <ContentAdd>new</ContentAdd>
+          <ContentAdd onClick={() => createNewContent()}>new</ContentAdd>
           {/* <DateGap>
             {startDate}-{endDate}
           </DateGap> */}
