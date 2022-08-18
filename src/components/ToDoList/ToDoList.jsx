@@ -20,15 +20,37 @@ import * as Helper from "../../utils/Helpers";
 const Store = window.require("electron-store");
 const dataStore = new Store({
   name: "data",
-  accessPropertiesByDotNotation: false,
+  watch: true,
 });
-const ToDoList = (props) => {
-  const { id, title, tasks } = props;
-  const taskObj = Helper.flattenArr(tasks);
-  const [count, setCount] = useState(tasks.length);
-  const [tasksList, setTasksList] = useState(taskObj);
-  const tasksArr = Helper.objToArr(tasksList);
+const saveTasksToStore = (tasks, title) => {
+  const newTasksArr = Helper.objToArr(tasks);
+  dataStore.set(`ToDo.${title}.tasks`, newTasksArr);
+  console.log(dataStore.get(`ToDo.ToDo.tasks`));
+};
 
+const ToDoList = (props) => {
+  const { title, tasks } = props;
+
+  const taskObj = Helper.flattenArr(tasks);
+  //   const [count, setCount] = useState(tasks.length);
+  const [tasksList, setTasksList] = useState(taskObj);
+  //   console.log(taskObj);
+  const tasksArr = Helper.objToArr(tasksList);
+  const count = tasksArr.length;
+  //   switch (title) {
+  //     case "ToDo":
+  //       console.log(dataStore.get("ToDo").ToDo);
+  //       break;
+  //     case "Doing":
+  //       console.log(dataStore.get("ToDo").Doing);
+  //       break;
+  //     case "Done":
+  //       console.log(dataStore.get("ToDo").Done);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  //   console.log(dataStore.get("ToDo").Doing);
   //   console.log(tasksArr);
 
   const addTask = () => {
@@ -43,21 +65,22 @@ const ToDoList = (props) => {
       isNew: true,
     };
     setTasksList({ ...tasksList, [newID]: newTask });
-    // // dataStore.set(`ToDo.${id}.tasks`: { ...tasksList, [newID]: newTask });
-    // console.log(dataStore.get(`ToDo.`));
+    console.log(dataStore.get(`ToDo`));
     console.log("add");
   };
 
   const updateToDoName = (id, name, isNew) => {
     const modifiedItem = { ...tasksList[id], name, isNew: false };
     const newTasks = { ...tasksList, [id]: modifiedItem };
-    if (isNew) {
-      setTasksList(newTasks);
-      console.log(title + " init");
-    } else {
-      setTasksList(newTasks);
-      console.log(title + " update");
-    }
+    // if (isNew) {
+
+    //   console.log(title + " init");
+    // } else {
+    //   setTasksList(newTasks);
+    //   console.log(title + " update");
+    // }
+    setTasksList(newTasks);
+    saveTasksToStore(newTasks, title);
   };
 
   return (
