@@ -25,16 +25,18 @@ const dataStore = new Store({
 const saveTasksToStore = (tasks, title) => {
   const newTasksArr = Helper.objToArr(tasks);
   dataStore.set(`ToDo.${title}.tasks`, newTasksArr);
-  console.log(dataStore.get(`ToDo.ToDo.tasks`));
+  //   console.log(dataStore.get(`ToDo.ToDo.tasks`));
 };
 
 const ToDoList = (props) => {
   const { title, tasks } = props;
   const taskObj = Helper.flattenArr(tasks);
   const [tasksList, setTasksList] = useState(taskObj);
+  const [activeTasks, setActiveTasks] = useState([]);
   const tasksArr = Helper.objToArr(tasksList);
   const count = tasksArr.length;
 
+  //   create
   const addTask = () => {
     const newID = uuidv4();
     const newTask = {
@@ -47,22 +49,44 @@ const ToDoList = (props) => {
       isNew: true,
     };
     setTasksList({ ...tasksList, [newID]: newTask });
-    console.log(dataStore.get(`ToDo`));
-    console.log("add");
+    // console.log(dataStore.get(`ToDo`));
+    // console.log("add");
   };
 
+  // update
   const updateToDoName = (id, name, isNew) => {
     const modifiedItem = { ...tasksList[id], name, isNew: false };
     const newTasks = { ...tasksList, [id]: modifiedItem };
-    // if (isNew) {
-
-    //   console.log(title + " init");
-    // } else {
-    //   setTasksList(newTasks);
-    //   console.log(title + " update");
-    // }
     setTasksList(newTasks);
     saveTasksToStore(newTasks, title);
+  };
+
+  const updateToDoActive = (id, active) => {
+    const modifiedItem = { ...tasksList[id], isActive: active };
+    const newTasks = { ...tasksList, [id]: modifiedItem };
+    setTasksList(newTasks);
+    saveTasksToStore(newTasks, title);
+  };
+
+  // change active file
+  const changeActive = (taskID) => {
+    if (!activeTasks.includes(taskID)) {
+      setActiveTasks([...activeTasks, taskID]);
+      updateToDoActive(taskID, true);
+    } else {
+      const afterClose = activeTasks.filter((itemID) => itemID !== taskID);
+      setActiveTasks(afterClose);
+      updateToDoActive(taskID, false);
+    }
+    console.log(dataStore.get(`ToDo.${title}.tasks`));
+    console.log(activeTasks.includes(taskID));
+  };
+
+  //   delete
+  const deleteToDoItem = (id) => {
+    const { [id]: value, ...afterDelete } = tasksList;
+    setTasksList(afterDelete);
+    saveTasksToStore(afterDelete, title);
   };
 
   return (
@@ -86,12 +110,15 @@ const ToDoList = (props) => {
                 key={id}
                 id={id}
                 name={name}
-                isActive={isActive}
+                isActive={activeTasks.includes(id)}
                 contents={contents}
                 startDate={startDate}
                 endDate={endDate}
                 isNewPart={isNew}
                 updateToDoName={updateToDoName}
+                deleteToDoItem={deleteToDoItem}
+                updateToDoActive={updateToDoActive}
+                changeActive={changeActive}
               ></ToDoItem>
             );
           })}

@@ -75,13 +75,7 @@ const schemaStructure = {
     },
   },
 };
-// const dataStore = new Store({
-//   name: "data",
-//   accessPropertiesByDotNotation: false,
-//   watch: true,
-//   default: initStore,
-//   //   schema: schemaStructure,
-// });
+
 const dataStore = new Store({
   name: "data",
   accessPropertiesByDotNotation: false,

@@ -5,6 +5,7 @@ import {
   blackColor,
   grayMoreColor,
   grayColor,
+  assistColor,
 } from "../../styleVariable";
 
 import check from "../../static/svg/check.svg";
@@ -29,6 +30,8 @@ export const ItemContainer = styled.div`
   align-items: center;
   justify-items: center;
   height: 32px;
+  gap: 8px;
+  cursor: pointer;
 `;
 
 export const ItemContent = styled.span`
@@ -40,8 +43,9 @@ export const ItemContent = styled.span`
 `;
 
 export const ItemEditInput = styled.input`
+  /* flex-grow: 1; */
   height: 100%;
-  width: 90%;
+  width: 60%;
 `;
 
 export const ItemIcon = styled.div`
@@ -49,7 +53,7 @@ export const ItemIcon = styled.div`
   height: 24px;
   mask-image: url(${(props) => props.icon});
   background-color: ${grayMoreColor};
-  cursor: pointer;
+  cursor: default;
   transition: all 0.5s;
   &:hover {
     background-color: ${blackColor};
@@ -72,6 +76,19 @@ export const ContentWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   /* justify-content: center; */
+`;
+
+export const ContentAdd = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  /* padding: 4px 0; */
+  height: 24px;
+  background: ${assistColor};
+  color: ${whiteColor};
+  border-radius: 8px;
+  cursor: pointer;
 `;
 
 export const ContentStatus = styled.div`
