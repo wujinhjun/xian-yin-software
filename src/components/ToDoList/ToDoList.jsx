@@ -13,7 +13,7 @@ import {
 } from "./style";
 
 import plus from "../../static/svg/plus.svg";
-
+import useContextMenu from "../../hooks/useContextMenu";
 import ToDoItem from "../ToDoItem/ToDoItem";
 import * as Helper from "../../utils/Helpers";
 
@@ -33,6 +33,7 @@ const ToDoList = (props) => {
   const taskObj = Helper.flattenArr(tasks);
   const [tasksList, setTasksList] = useState(taskObj);
   const [activeTasks, setActiveTasks] = useState([]);
+  const [editStatus, setEditStatus] = useState(false);
   const tasksArr = Helper.objToArr(tasksList);
   const count = tasksArr.length;
 
@@ -82,6 +83,10 @@ const ToDoList = (props) => {
     console.log(activeTasks.includes(taskID));
   };
 
+  const editItem = (id) => {
+    setEditStatus(id);
+  };
+
   //   delete
   const deleteToDoItem = (id) => {
     const { [id]: value, ...afterDelete } = tasksList;
@@ -117,8 +122,8 @@ const ToDoList = (props) => {
                 isNewPart={isNew}
                 updateToDoName={updateToDoName}
                 deleteToDoItem={deleteToDoItem}
-                updateToDoActive={updateToDoActive}
                 changeActive={changeActive}
+                devList={tasksArr}
               ></ToDoItem>
             );
           })}

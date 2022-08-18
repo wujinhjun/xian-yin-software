@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 import useKeyPress from "../../hooks/useKeyPress";
 import useContextMenu from "../../hooks/useContextMenu";
+import useMouseLocation from "../../hooks/useMouseLocation";
 
 import ContCentContainer from "./ContentsContainer";
 
@@ -39,8 +40,8 @@ const ToDoItem = (props) => {
     isNewPart,
     updateToDoName,
     deleteToDoItem,
-    updateToDoActive,
     changeActive,
+    devList,
   } = props;
   //   const [active, setActive] = useState(isActive);
   const active = isActive;
@@ -48,7 +49,7 @@ const ToDoItem = (props) => {
   const [isNew, setIsNew] = useState(isNewPart);
   const [value, setValue] = useState(name);
   const node = useRef(null);
-
+  const mouseLocation = useMouseLocation();
   const enterPress = useKeyPress(13);
   const escPress = useKeyPress(27);
 
@@ -63,69 +64,64 @@ const ToDoItem = (props) => {
     deleteToDoItem(id);
   };
 
-  const clickElement = useContextMenu(
-    [
-      {
-        label: `${active ? "收起" : "展开"}`,
-        click: () => {
-          const parentElement = Helper.getParentNode(
-            clickElement.current,
-            "to-do-item"
-          );
-          if (parentElement) {
-            const clickID = parentElement.dataset.id;
-            // console.log("unfolding");
-            // console.log(clickID + " " + active);
-            // console.log(id);
-            // updateToDoActive(clickID, active);
-            // console.log(active);
-            changeActive(clickID);
-          }
-          //   console.log(parentElement);
-        },
-      },
-      {
-        label: `删除`,
-        click: () => {
-          const parentElement = Helper.getParentNode(
-            clickElement.current,
-            "to-do-item"
-          );
-          if (parentElement) {
-            // console.log("unfolding");
-            deleteItem(id);
-          }
-        },
-      },
-      {
-        label: "重命名",
-        click: () => {
-          const parentElement = Helper.getParentNode(
-            clickElement.current,
-            "to-do-item"
-          );
-          if (parentElement) {
-            console.log("rename");
-            editItem();
-          }
-        },
-      },
-      {
-        label: "新建子项",
-        click: () => {
-          const parentElement = Helper.getParentNode(
-            clickElement.current,
-            "to-do-item"
-          );
-          if (parentElement) {
-            console.log("new son");
-          }
-        },
-      },
-    ],
-    ".to-do-list",
-    [active]
-  );
+  //   const clickElement = useContextMenu(
+  //     [
+  //       {
+  //         label: `${active ? "收起" : "展开"}`,
+  //         click: () => {
+  //           const parentElement = Helper.getParentNode(
+  //             clickElement.current,
+  //             "to-do-item"
+  //           );
+  //           if (parentElement) {
+  //             const clickID = parentElement.dataset.id;
+  //             changeActive(clickID);
+  //           }
+  //         },
+  //       },
+  //       {
+  //         label: `删除`,
+  //         click: () => {
+  //           const parentElement = Helper.getParentNode(
+  //             clickElement.current,
+  //             "to-do-item"
+  //           );
+  //           if (parentElement) {
+  //             // console.log("unfolding");
+  //             const clickID = parentElement.dataset.id;
+  //             deleteItem(clickID);
+  //           }
+  //         },
+  //       },
+  //       {
+  //         label: "重命名",
+  //         click: () => {
+  //           const parentElement = Helper.getParentNode(
+  //             clickElement.current,
+  //             "to-do-item"
+  //           );
+  //           if (parentElement) {
+  //             console.log("rename");
+  //             editItem();
+  //           }
+  //         },
+  //       },
+  //       {
+  //         label: "新建子项",
+  //         click: () => {
+  //           const parentElement = Helper.getParentNode(
+  //             clickElement.current,
+  //             "to-do-item"
+  //           );
+  //           if (parentElement) {
+  //             console.log("new son");
+  //           }
+  //         },
+  //       },
+  //     ],
+  //     ".to-do-list",
+  //     [mouseLocation.x, mouseLocation.y]
+  //   );
 
   useEffect(() => {
     if (isNew) {
