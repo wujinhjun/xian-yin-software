@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "main": "main.js",
+  "author": {
+    "name": "wujinhjun",
+    "email": "wujinhjun@sjtu.edu.cn"
+  },
+  "description": "time manager",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
@@ -24,9 +29,9 @@
     "buildMain": "webpack",
     "ele": "nodemon --watch main.js --exec \"electron .\"",
     "dev": "concurrently \"wait-on http://localhost:3000 && electron .\" \"cross-env BROWSER=none npm start\"",
-    "dir": "electron-builder --dir",
+    "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "predir": "npm run build && npm run buildMain",
+    "prepack": "npm run build && npm run buildMain",
     "predist": "npm run build && npm run buildMain"
   },
   "eslintConfig": {
@@ -34,6 +39,67 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "homepage": "./",
+  "build": {
+    "appId": "xianYing",
+    "productName": "闲吟",
+    "copyright": "Copyright © 2019 ${author}",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "extraMetadata": {
+      "main": "./build/main.js"
+    },
+    "publish": [
+      "github"
+    ],
+    "extends": null,
+    "mac": {
+      "category": "public.app-category.productivity",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "dmg": {
+      "background": "assets/appdmg.png",
+      "icon": "assets/icon.icns",
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 380,
+          "y": 280,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 110,
+          "y": 280,
+          "type": "file"
+        }
+      ],
+      "window": {
+        "width": 500,
+        "height": 500
+      }
+    },
+    "win": {
+      "target": [
+        "msi",
+        "nsis"
+      ],
+      "icon": "assets/icon.ico",
+      "artifactName": "${productName}-Web-Setup-${version}.${ext}",
+      "publisherName": "wujinhjun"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "perMachine": false
+    }
   },
   "browserslist": {
     "production": [
@@ -51,9 +117,11 @@
     "@electron/remote": "^2.0.8",
     "concurrently": "^7.3.0",
     "cross-env": "^7.0.3",
-    "electron": "^20.0.2",
+    "electron": "^20.0.3",
+    "electron-builder": "^23.3.3",
     "electron-devtools-installer": "^3.2.0",
     "nodemon": "^2.0.19",
-    "wait-on": "^6.0.1"
+    "wait-on": "^6.0.1",
+    "webpack-cli": "^4.10.0"
   }
 }

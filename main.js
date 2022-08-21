@@ -22,7 +22,7 @@ const createWindow = () => {
     })
 
     // 加载 index.html
-    const urlLocation = isDev ? "http://localhost:3000" : `url`;
+    const urlLocation = isDev ? "http://localhost:3000" : `file://${path.join(__dirname, './index.html')}`;
     mainWindow.loadURL(urlLocation)
     initialize();
     enable(mainWindow.webContents);
@@ -34,7 +34,7 @@ const createWindow = () => {
         .catch((err) => console.log('An error occurred: ', err));
 
     // conceal menu
-    // mainWindow.removeMenu();
+    mainWindow.removeMenu();
 }
 
 const options = {
