@@ -108,12 +108,33 @@ const ToDoList = (props) => {
 
   //   complex interactive
 
-  const removeTask = (oldTitle, targetTitle, taskID) => {};
+  //   get target tasks
+
+  const getTasksObj = (targetTitle) => {
+    // console.log(Helper.flattenArr(dataStore.get(`ToDo.${targetTitle}.tasks`)));
+    return Helper.flattenArr(dataStore.get(`ToDo.${targetTitle}.tasks`));
+  };
+
+  const removeTask = (oldTitle, targetTitle, taskID) => {
+    // get targetTask
+    const targetTask = tasksList[taskID];
+    // delete item
+    deleteToDoItem(taskID);
+    //get target item
+    // add item to target tasksList
+    const targetTasks = getTasksObj(targetTitle);
+    console.log(targetTasks);
+    const newTargetTasks = { ...targetTasks, [taskID]: targetTask };
+    console.log(newTargetTasks);
+    saveTasksToStore(newTargetTasks, targetTitle);
+    // reload pages
+    window.location.reload();
+  };
 
   const clickElement = useContextMenu(
     [
       {
-        label: `Open`,
+        label: `折叠`,
         click: () => {
           const parentElement = Helper.getParentNode(
             clickElement.current,
@@ -121,29 +142,80 @@ const ToDoList = (props) => {
           );
           if (parentElement) {
             const clickID = parentElement.dataset.id;
-            console.log(clickID);
+            // console.log(clickID);
+            changeActive(clickID);
           }
         },
       },
       {
         label: `ToDo`,
         click: () => {
-          console.log("To Do");
-          //   get the tasks' title
-          // set the old title's tasks for afterDelete
-          // set the new title's tasks for move
+          //   console.log("To Do");
+
+          const parentElement = Helper.getParentNode(
+            clickElement.current,
+            `to-do-item`
+          );
+          if (parentElement) {
+            //   get the tasks' title
+
+            const oldTitle = parentElement.dataset.category;
+            const newTitle = `ToDo`;
+            if (oldTitle !== newTitle) {
+              // set the old title's tasks for afterDelete
+              const clickID = parentElement.dataset.id;
+              // set the new title's tasks for move
+              //   const targetTasks = dataStore.get(`ToDo.`);
+              removeTask(oldTitle, newTitle, clickID);
+              //   getTasksObj(newTitle);
+            }
+          }
         },
       },
       {
         label: "Doing",
         click: () => {
-          console.log("Doing");
+          const parentElement = Helper.getParentNode(
+            clickElement.current,
+            `to-do-item`
+          );
+          if (parentElement) {
+            //   get the tasks' title
+
+            const oldTitle = parentElement.dataset.category;
+            const newTitle = `Doing`;
+            if (oldTitle !== newTitle) {
+              // set the old title's tasks for afterDelete
+              const clickID = parentElement.dataset.id;
+              // set the new title's tasks for move
+              //   const targetTasks = dataStore.get(`ToDo.`);
+              removeTask(oldTitle, newTitle, clickID);
+              //   getTasksObj(newTitle);
+            }
+          }
         },
       },
       {
         label: "Done",
         click: () => {
-          console.log("Done");
+          const parentElement = Helper.getParentNode(
+            clickElement.current,
+            `to-do-item`
+          );
+          if (parentElement) {
+            //   get the tasks' title
+
+            const oldTitle = parentElement.dataset.category;
+            const newTitle = `Done`;
+            if (oldTitle !== newTitle) {
+              // set the old title's tasks for afterDelete
+              const clickID = parentElement.dataset.id;
+              // set the new title's tasks for move
+              //   const targetTasks = dataStore.get(`ToDo.`);
+              removeTask(oldTitle, newTitle, clickID);
+              //   getTasksObj(newTitle);
+            }
+          }
         },
       },
     ],
@@ -175,6 +247,7 @@ const ToDoList = (props) => {
             return (
               <ToDoItem
                 key={id}
+                title={title}
                 id={id}
                 name={name}
                 isActive={activeTasks.includes(id)}
