@@ -28,6 +28,7 @@ const dataStore = new Store({
 
 const ToDoItem = (props) => {
   const {
+    title,
     id,
     name,
     isActive,
@@ -140,6 +141,7 @@ const ToDoItem = (props) => {
   return (
     <ItemWrapper
       data-id={id}
+      data-category={title}
       className={active ? "active to-do-item" : "to-do-item"}
     >
       <ItemContainer>

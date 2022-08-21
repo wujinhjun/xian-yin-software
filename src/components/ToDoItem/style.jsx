@@ -125,6 +125,6 @@ export const DateGap = styled.span`
 `;
 
 export const ContentInput = styled.input`
-  width: auto;
+  width: 90%;
   height: 100%;
 `;
