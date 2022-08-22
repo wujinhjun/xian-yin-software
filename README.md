@@ -66,3 +66,11 @@ Therefore, I use the contextMenu to handle this function
 User can right click when mouse hover the item, and then can choose the target areas.
 
 ### Delete
+
+#### delete task
+
+User can click the icon of trash to delete the tasks
+
+#### delete content in task
+
+User can't delete it, as it is the lowest components. Maybe don't need to delete
